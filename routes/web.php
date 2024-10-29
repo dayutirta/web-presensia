@@ -37,10 +37,6 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('profile');
 	})->name('profile');
 
-	Route::get('rtl', function () {
-		return view('rtl');
-	})->name('rtl');
-
 	Route::get('user-management', function () {
 		return view('laravel-examples/user-management');
 	})->name('user-management');
@@ -48,10 +44,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('tables', function () {
 		return view('tables');
 	})->name('tables');
-
-    Route::get('virtual-reality', function () {
-		return view('virtual-reality');
-	})->name('virtual-reality');
 
     Route::get('static-sign-in', function () {
 		return view('static-sign-in');

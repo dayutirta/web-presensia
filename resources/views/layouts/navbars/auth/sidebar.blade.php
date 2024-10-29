@@ -17,14 +17,6 @@
         </a>
       </li>
       <li class="nav-item pb-2">
-        <a class="nav-link {{ (Request::is('user-profile') ? 'active' : '') }}" href="{{ url('user-profile') }}">
-          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-user" style="font-size: 1rem; color: {{ (Request::is('user-profile') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">User Profile</span>
-        </a>
-      </li>
-      <li class="nav-item pb-2">
         <a class="nav-link {{ (Request::is('user-management') ? 'active' : '') }}" href="{{ url('user-management') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-users" style="font-size: 1rem; color: {{ (Request::is('user-management') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
@@ -37,7 +29,7 @@
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-table" style="font-size: 1rem; color: {{ (Request::is('tables') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
           </div>
-          <span class="nav-link-text ms-1">Tables</span>
+          <span class="nav-link-text ms-1">Permit Management</span>
         </a>
       </li>
       <li class="nav-item pb-2">
@@ -45,31 +37,7 @@
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <i class="fas fa-file-invoice-dollar" style="font-size: 1rem; color: {{ (Request::is('billing') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
           </div>
-          <span class="nav-link-text ms-1">Billing</span>
-        </a>
-      </li>
-      <li class="nav-item pb-2">
-        <a class="nav-link {{ (Request::is('profile') ? 'active' : '') }}" href="{{ url('profile') }}">
-          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-id-card" style="font-size: 1rem; color: {{ (Request::is('profile') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">Profile</span>
-        </a>
-      </li>
-      <li class="nav-item pb-2">
-        <a class="nav-link" href="{{ url('static-sign-in') }}">
-          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-sign-out-alt" style="font-size: 1rem; color: {{ (Request::is('static-sign-in') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">Log out</span>
-        </a>
-      </li>
-      <li class="nav-item pb-2">
-        <a class="nav-link" href="{{ url('static-sign-up') }}">
-          <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-user-plus" style="font-size: 1rem; color: {{ (Request::is('static-sign-up') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">Register</span>
+          <span class="nav-link-text ms-1">Bills Management</span>
         </a>
       </li>
     </ul>
