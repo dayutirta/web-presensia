@@ -7,13 +7,41 @@
             <h6 class="font-weight-bolder d-inline mb-0 text-capitalize">{{ str_replace('-', ' ', Request::path()) }}</h6>
         </nav>
         <nav aria-label="breadcrumb" ></nav>
+
         <!-- Navbar Right Section -->
         <div class="d-flex align-items-center">
             <!-- Sign Out Button -->
-            <a href="{{ url('/logout') }}" class="nav-link text-body font-weight-bold px-0 me-3">
-                <i class="fa fa-door-open me-sm-1"></i>
-                <span class="d-sm-inline d-none">Log Out</span>
-            </a>
+
+            <div class="nav-item dropdown">
+                <a href="javascript:;" class="nav-link text-body font-weight-bold px-0 me-3" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-user me-sm-1"></i>
+                    <span class="d-sm-inline d-none">[NAMA]</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="profileDropdown">
+                    <li>
+                        <a href="{{ url('/profile') }}" class="dropdown-item">
+                            <i class="fa fa-user me-sm-1"></i>
+                            <span class="d-sm-inline d-none">Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/static-sign-up') }}" class="dropdown-item">
+                            <i class="fa fa-user me-sm-1"></i>
+                            <span class="d-sm-inline d-none">Registrasi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('/logout') }}" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt me-sm-1"></i>
+                            <span class="d-sm-inline d-none">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+
+
             <!-- Notification Dropdown -->
             <div class="nav-item dropdown">
                 <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -41,6 +69,7 @@
                     <!-- Additional Notification Items -->
                 </ul>
             </div>
+
             <!-- Sidenav Toggler for Small Screens -->
             <a href="javascript:;" class="nav-link text-body p-0 d-xl-none ms-3" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">
