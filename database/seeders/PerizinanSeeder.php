@@ -5,45 +5,32 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Faker\Factory as Faker;
 
 class PerizinanSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('perizinan')->insert([
-            [
-                'id_pegawai' => 1,
-                'jenis_izin' => 'Sakit',
-                'tanggal_mulai' => '2024-10-01',
-                'tanggal_akhir' => '2024-10-02',
-                'keterangan' => 'Flu berat',
-                'status_izin' => 'Disetujui',
-                'dokumen' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_pegawai' => 2,
-                'jenis_izin' => 'Cuti',
-                'tanggal_mulai' => '2024-10-05',
-                'tanggal_akhir' => '2024-10-07',
-                'keterangan' => 'Liburan keluarga',
-                'status_izin' => 'Disetujui',
-                'dokumen' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_pegawai' => 3,
-                'jenis_izin' => 'WFH',
-                'tanggal_mulai' => '2024-10-10',
-                'tanggal_akhir' => '2024-10-10',
-                'keterangan' => 'Work From Home',
-                'status_izin' => 'Disetujui',
-                'dokumen' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        $faker = Faker::create('id_ID');
+
+        for ($i = 0; $i < 10; $i++) {
+            $tanggal_mulai = $faker->dateTimeThisYear();
+            $tanggal_akhir = (clone $tanggal_mulai)->modify('+'. $faker->numberBetween(1, 5) .' days');
+            $jenis_izin = $faker->randomElement(['Sakit', 'Cuti', 'WFH']);
+            $status_izin = $faker->randomElement(['Disetujui', 'Ditolak']);
+            $keterangan = $jenis_izin === 'Sakit' ? 'Sakit ' . $faker->word : ($jenis_izin === 'Cuti' ? 'Liburan' : 'Work From Home');
+
+            DB::table('perizinan')->insert([
+                'id_pegawai' => $faker->numberBetween(1, 3), // Mengacu pada pegawai dengan id 1-3
+                'jenis_izin' => $jenis_izin,
+                'tanggal_mulai' => $tanggal_mulai->format('Y-m-d'),
+                'tanggal_akhir' => $tanggal_akhir->format('Y-m-d'),
+                'keterangan' => $keterangan,
+                'status_izin' => $status_izin,
+                'dokumen' => null, // Atau tambahkan logika untuk mengisi dokumen
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
     }
 }
