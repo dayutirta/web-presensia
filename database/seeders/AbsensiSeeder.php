@@ -5,60 +5,32 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Faker\Factory as Faker;
 
 class AbsensiSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('absensi')->insert([
-            [
-                'id_pegawai' => 1, // John Doe
-                'id_izin' => null, // Hadir tanpa izin
-                'tanggal' => '2024-10-26',
-                'waktu_masuk' => Carbon::parse('2024-10-26 08:00:00'),
-                'waktu_keluar' => Carbon::parse('2024-10-26 17:00:00'),
-                'status_absen' => 'Hadir',
-                'foto_absen' => null,
-                'lokasi_absen' => 'Jakarta',
+        $faker = Faker::create('id_ID');
+
+        for ($i = 0; $i < 20; $i++) {
+            $status_absen = $faker->randomElement(['Hadir', 'Izin']);
+            $waktu_masuk = $status_absen === 'Hadir' ? Carbon::parse($faker->dateTimeBetween('08:00', '09:00')->format('Y-m-d H:i:s')) : null;
+            $waktu_keluar = $status_absen === 'Hadir' ? Carbon::parse($faker->dateTimeBetween('17:00', '18:00')->format('Y-m-d H:i:s')) : null;
+            $id_izin = $status_absen === 'Izin' ? $faker->randomElement([1, 2]) : null; // 1: Sakit, 2: Cuti
+
+            DB::table('absensi')->insert([
+                'id_pegawai' => $faker->numberBetween(1, 3), // Angka pegawai antara 1-3
+                'id_izin' => $id_izin,
+                'tanggal' => $faker->dateTimeThisMonth()->format('Y-m-d'),
+                'waktu_masuk' => $waktu_masuk,
+                'waktu_keluar' => $waktu_keluar,
+                'status_absen' => $status_absen,
+                'foto_absen' => null, // Bisa tambahkan logika untuk foto jika diperlukan
+                'lokasi_absen' => $faker->city,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-            ],
-            [
-                'id_pegawai' => 2, // Jane Smith
-                'id_izin' => 1, // Sakit
-                'tanggal' => '2024-10-01',
-                'waktu_masuk' => null,
-                'waktu_keluar' => null,
-                'status_absen' => 'Izin',
-                'foto_absen' => null,
-                'lokasi_absen' => 'Bandung',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id_pegawai' => 3, // Alice Johnson
-                'id_izin' => 2, // Cuti
-                'tanggal' => '2024-10-05',
-                'waktu_masuk' => null,
-                'waktu_keluar' => null,
-                'status_absen' => 'Izin',
-                'foto_absen' => null,
-                'lokasi_absen' => 'Surabaya',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id_pegawai' => 3, // Alice Johnson
-                'id_izin' => null, // Hadir tanpa izin
-                'tanggal' => '2024-10-11',
-                'waktu_masuk' => Carbon::parse('2024-10-11 09:00:00'),
-                'waktu_keluar' => Carbon::parse('2024-10-11 18:00:00'),
-                'status_absen' => 'Hadir',
-                'foto_absen' => null,
-                'lokasi_absen' => 'Surabaya',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-        ]);
+            ]);
+        }
     }
 }

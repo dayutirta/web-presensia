@@ -6,23 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
     public function up(): void
     {
         Schema::create('pegawai', function (Blueprint $table) {
             $table->id('id_pegawai');
-            $table->unsignedBigInteger('id_level'); // Tipe data foreign key
+            $table->unsignedBigInteger('id_level');
 
             $table->string('nama_pegawai', 100);
-            $table->integer('no_pegawai');
+            $table->integer('no_pegawai')->unique();
+            $table->integer('supervisor')->nullable();
             $table->string('jabatan', 100);
             $table->string('alamat', 255);
-            $table->string('nohp', 15);
+            $table->string('nohp', 20);
             $table->string('password');
-            $table->binary('foto')->nullable(); // Menyimpan foto dalam format bytea
-            $table->timestamps(); // created_at & updated_at
+            $table->binary('foto')->nullable();
+            $table->timestamps();
 
-            // Definisi foreign key
             $table->foreign('id_level')->references('id_level')->on('level')->onDelete('cascade');
         });
     }
