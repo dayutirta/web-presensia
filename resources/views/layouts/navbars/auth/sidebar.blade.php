@@ -25,17 +25,17 @@
         </a>
       </li>
       <li class="nav-item pb-2">
-        <a class="nav-link {{ (Request::is('tables') ? 'active' : '') }}" href="{{ url('tables') }}">
+        <a class="nav-link {{ (Request::is('permit-management') ? 'active' : '') }}" href="{{ url('permit-management') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-table" style="font-size: 1rem; color: {{ (Request::is('tables') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
+            <i class="fas fa-table" style="font-size: 1rem; color: {{ (Request::is('permit-management') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
           </div>
           <span class="nav-link-text ms-1">Permit Management</span>
         </a>
       </li>
       <li class="nav-item pb-2">
-        <a class="nav-link {{ (Request::is('billing') ? 'active' : '') }}" href="{{ url('billing') }}">
+        <a class="nav-link {{ (Request::is('bills-management') ? 'active' : '') }}" href="{{ url('bills-management') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-file-invoice-dollar" style="font-size: 1rem; color: {{ (Request::is('billing') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
+            <i class="fas fa-file-invoice-dollar" style="font-size: 1rem; color: {{ (Request::is('bills-management') ? '#ffffff' : '#000000') }};" aria-hidden="true"></i>
           </div>
           <span class="nav-link-text ms-1">Bills Management</span>
         </a>

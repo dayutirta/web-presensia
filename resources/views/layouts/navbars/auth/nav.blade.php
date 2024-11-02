@@ -3,7 +3,7 @@
     <div class="container-fluid py-1 px-3">
         <!-- Breadcrumb Navigation -->
         <nav aria-label="breadcrumb" class="d-xl-none">
-            <h6 class="d-inline">Pages/</h6>
+            <h6 class="d-inline">Pages /</h6>
             <h6 class="font-weight-bolder d-inline mb-0 text-capitalize">{{ str_replace('-', ' ', Request::path()) }}</h6>
         </nav>
         <nav aria-label="breadcrumb" ></nav>
