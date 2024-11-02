@@ -13,53 +13,50 @@ class PegawaiSeeder extends Seeder
     {
         $faker = Faker::create('id_ID'); // Menggunakan locale Indonesia
 
-        // Insert 1 HR Manager
-        $hrManagerId = DB::table('pegawai')->insertGetId([
-            'id_level' => 1, // Level khusus HR Manager
+        // Insert HRD
+        $hrdId = DB::table('pegawai')->insertGetId([
+            'id_level' => 1,
             'nama_pegawai' => 'John Doe',
             'no_pegawai' => 100,
-            'jabatan' => 'HR Manager',
+            'jabatan' => 'HRD',
             'alamat' => 'Jakarta',
             'nohp' => '081234567890',
             'password' => Hash::make('password'),
-            'supervisor' => null, // HR Manager tidak punya supervisor
+            'boss' => null, // HRD tidak punya boss
             'foto' => null,
             'created_at' => now(),
             'updated_at' => now(),
-        ], 'id_pegawai'); // specify the primary key column here
+        ], 'id_pegawai'); 
 
-
-        // Insert beberapa Supervisor and store their no_pegawai
-        $supervisorNos = [];
-        for ($i = 0; $i < 3; $i++) {
-            $supervisorNos[] = DB::table('pegawai')->insertGetId([
-                'id_level' => 2, // Level supervisor
+        // Insert Supervisors
+        $supervisors = [];
+        for ($i = 0; $i < 4; $i++) {
+            $supervisors[] = DB::table('pegawai')->insertGetId([
+                'id_level' => 2,
                 'nama_pegawai' => $faker->name,
-                'no_pegawai' => $no_pegawai = $faker->unique()->numberBetween(101, 199),
+                'no_pegawai' => $faker->unique()->numberBetween(101, 199),
                 'jabatan' => 'Supervisor',
                 'alamat' => $faker->city,
                 'nohp' => $faker->phoneNumber,
                 'password' => Hash::make('password'),
-                'supervisor' => null, // Supervisor tidak punya supervisor
+                'boss' => $hrdId, // Supervisor melapor ke HRD
                 'foto' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ], 'id_pegawai'); // specify the primary key column here            
-
-            $supervisorNos[] = $no_pegawai;
+            ], 'id_pegawai'); 
         }
 
-        // Insert beberapa Staff yang memiliki supervisor
+        // Insert Staff
         for ($i = 0; $i < 16; $i++) {
             DB::table('pegawai')->insert([
-                'id_level' => 3, // Level staff
+                'id_level' => 3,
                 'nama_pegawai' => $faker->name,
                 'no_pegawai' => $faker->unique()->numberBetween(200, 999),
                 'jabatan' => 'Staff',
                 'alamat' => $faker->city,
                 'nohp' => $faker->phoneNumber,
                 'password' => Hash::make('password'),
-                'supervisor' => $faker->randomElement($supervisorNos), // berisi no_pegawai
+                'boss' => $faker->randomElement($supervisors), // Staff melapor ke salah satu Supervisor
                 'foto' => null,
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -14,7 +14,7 @@ return new class extends Migration
 
             $table->string('nama_pegawai', 100);
             $table->integer('no_pegawai')->unique();
-            $table->integer('supervisor')->nullable();
+            $table->unsignedBigInteger('boss')->nullable();
             $table->string('jabatan', 100);
             $table->string('alamat', 255);
             $table->string('nohp', 20);
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('id_level')->references('id_level')->on('level')->onDelete('cascade');
+            $table->foreign('boss')->references('id_pegawai')->on('pegawai')->onDelete('set null');
         });
     }
 
