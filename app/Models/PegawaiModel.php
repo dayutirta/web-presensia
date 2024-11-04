@@ -23,4 +23,8 @@ class PegawaiModel extends Authenticatable
     {
         return $this->belongsTo(LevelModel::class, 'id_level', 'id_level');
     }
+    public function bawahan()
+    {
+        return $this->hasMany(PegawaiModel::class, 'boss', 'id_pegawai');
+    }
 }
