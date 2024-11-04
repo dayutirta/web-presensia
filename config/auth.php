@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'pgw',
+        'passwords' => 'pgw',
     ],
 
     /*
@@ -36,9 +36,9 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'pgw' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'pgw',
         ],
     ],
 
@@ -60,9 +60,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'pgw' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            // 'model' => App\Models\User::class,
+            'model' => App\Models\PegawaiModel::class,
         ],
 
         // 'users' => [
@@ -87,8 +88,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'pgw' => [
+            'provider' => 'pgw',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
