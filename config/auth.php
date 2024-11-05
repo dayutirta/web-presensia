@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'pgw',
         ],
+        // Tambahkan guard baru untuk API
+        'api' => [
+            'driver' => 'jwt',    // Gunakan driver JWT
+            'provider' => 'pgw',  // Gunakan provider yang sama dengan guard pgw
+        ],
     ],
 
     /*
@@ -62,14 +67,8 @@ return [
     'providers' => [
         'pgw' => [
             'driver' => 'eloquent',
-            // 'model' => App\Models\User::class,
             'model' => App\Models\PegawaiModel::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
