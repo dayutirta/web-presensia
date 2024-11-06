@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <form role="form" action="/reset-password" method="POST">
                             @csrf
-                            <input type="hidden" name="token" value="{{ $token }}">
+                            {{-- <input type="hidden" name="token" value="{{ $token }}"> --}}
                             <div>
                                 <label for="email">Email</label>
                                 <div class="">
