@@ -12,10 +12,7 @@ class ApiAuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_pegawai' => 'required|string|max:100',
-            'no_pegawai' => 'required|integer|unique:pegawai',
-            'boss' => 'nullable|exists:pegawai,id_pegawai',
-            'jabatan' => 'required|string|max:100',
+            'no_pegawai' => 'required|string|max:20',
             'alamat' => 'required|string|max:255',
             'nohp' => 'required|string|max:20',
             'password' => 'required|string|min:6',
@@ -26,18 +23,24 @@ class ApiAuthController extends Controller
         }
 
         try {
-            $pegawai = PegawaiModel::create([
-                'nama_pegawai' => $request->nama_pegawai,
-                'no_pegawai' => $request->no_pegawai,
-                'boss' => $request->boss,
-                'jabatan' => $request->jabatan,
+            // Find pegawai by no_pegawai
+            $pegawai = PegawaiModel::where('no_pegawai', $request->no_pegawai)->first();
+
+            if (!$pegawai) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Pegawai not found with the provided no_pegawai',
+                ], 404);
+            }
+
+            // Update pegawai data
+            $pegawai->update([
                 'alamat' => $request->alamat,
                 'nohp' => $request->nohp,
                 'password' => Hash::make($request->password),
-                'id_level' => 3
             ]);
 
-            // Buat token secara manual
+            // Generate token
             $token = auth('api')->login($pegawai);
 
             if (!$token) {
@@ -49,22 +52,79 @@ class ApiAuthController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Pegawai registered successfully',
+                'message' => 'Pegawai updated successfully',
                 'pegawai' => $pegawai,
                 'authorization' => [
                     'token' => $token,
                     'type' => 'bearer',
-                    'expires_in' => config('jwt.ttl') * 60 // Menggunakan config JWT langsung
+                    'expires_in' => config('jwt.ttl') * 60
                 ]
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Error during registration',
+                'message' => 'Error during update',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
+    // public function register(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'nama_pegawai' => 'required|string|max:100',
+    //         'no_pegawai' => 'required|integer|unique:pegawai',
+    //         'boss' => 'nullable|exists:pegawai,id_pegawai',
+    //         'jabatan' => 'required|string|max:100',
+    //         'alamat' => 'required|string|max:255',
+    //         'nohp' => 'required|string|max:20',
+    //         'password' => 'required|string|min:6',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json($validator->errors(), 422);
+    //     }
+
+    //     try {
+    //         $pegawai = PegawaiModel::create([
+    //             'nama_pegawai' => $request->nama_pegawai,
+    //             'no_pegawai' => $request->no_pegawai,
+    //             'boss' => $request->boss,
+    //             'jabatan' => $request->jabatan,
+    //             'alamat' => $request->alamat,
+    //             'nohp' => $request->nohp,
+    //             'password' => Hash::make($request->password),
+    //             'id_level' => 3
+    //         ]);
+
+    //         // Buat token secara manual
+    //         $token = auth('api')->login($pegawai);
+
+    //         if (!$token) {
+    //             return response()->json([
+    //                 'status' => 'error',
+    //                 'message' => 'Could not create token',
+    //             ], 500);
+    //         }
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Pegawai registered successfully',
+    //             'pegawai' => $pegawai,
+    //             'authorization' => [
+    //                 'token' => $token,
+    //                 'type' => 'bearer',
+    //                 'expires_in' => config('jwt.ttl') * 60 // Menggunakan config JWT langsung
+    //             ]
+    //         ], 201);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Error during registration',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
 
     public function login(Request $request)
     {
