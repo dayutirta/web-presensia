@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiAbsensiController;
 use App\Http\Controllers\ApiAuthController;
+use App\Http\Controllers\ApiPerizinanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,9 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::apiResource('absensi', ApiAbsensiController::class);
+
+Route::apiResource('perizinan', ApiPerizinanController::class);
+
+// Route khusus untuk admin menerima atau menolak izin
+Route::patch('perizinan/{perizinan}/approve', [ApiPerizinanController::class, 'approve']);
+Route::patch('perizinan/{perizinan}/reject', [ApiPerizinanController::class, 'reject']);
