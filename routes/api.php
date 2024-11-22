@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiAbsensiController;
 use App\Http\Controllers\ApiAuthController;
+use App\Http\Controllers\ApiHomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,8 @@ Route::post('login', [ApiAuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [ApiAuthController::class, 'logout']);
 });
+
+Route::post('/home/today', [ApiHomeController::class, 'getTodaysAttendance']);
+Route::post('/home/user', [ApiHomeController::class, 'getUser']);
 
 Route::apiResource('absensi', ApiAbsensiController::class);

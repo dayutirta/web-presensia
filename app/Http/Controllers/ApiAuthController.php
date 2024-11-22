@@ -176,7 +176,7 @@ class ApiAuthController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Nomor pegawai atau password salah',
-                ], 401);
+                ], 404);
             }
 
             // Ambil data pengguna yang berhasil login

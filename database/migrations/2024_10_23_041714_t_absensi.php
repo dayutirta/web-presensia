@@ -20,9 +20,9 @@ return new class extends Migration
             $table->timestamp('waktu_masuk')->nullable();
             $table->timestamp('waktu_keluar')->nullable();
             $table->string('status_absen', 50);
-            $table->binary('foto_absen')->nullable(); 
-            $table->string('lokasi_absen', length: 100); 
-            
+            $table->binary('foto_absen')->nullable();
+            $table->string('lokasi_absen', length: 100);
+
             $table->timestamps(); // created_at & updated_at
 
             // Definisi foreign key
