@@ -28,3 +28,6 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::apiResource('absensi', ApiAbsensiController::class);
+
+Route::get('/history', [ApiAbsensiController::class, 'history']);
+
