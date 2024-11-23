@@ -89,4 +89,17 @@ class ApiAbsensiController extends Controller
         $absensi->delete();
         return response()->json(null, 204);
     }
+    public function history(Request $request)
+    {
+        // Pastikan id_pegawai diterima dan valid
+        $idPegawai = $request->query('id_pegawai');
+    
+        if (is_null($idPegawai) || $idPegawai == 0) {
+            return response()->json(['error' => 'id_pegawai tidak valid'], 400);
+        }
+    
+        // Query data berdasarkan id_pegawai yang valid
+        return AbsensiModel::where('id_pegawai', $idPegawai)->get();
+    }
+    
 }

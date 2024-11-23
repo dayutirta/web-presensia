@@ -33,3 +33,5 @@ Route::post('/home/user', [ApiHomeController::class, 'getUser']);
 Route::post('/home/quota', [ApiHomeController::class, 'getRemainingQuota']);
 
 Route::apiResource('absensi', ApiAbsensiController::class);
+
+Route::get('/history', [ApiAbsensiController::class, 'history']);
