@@ -56,6 +56,11 @@ class PegawaiModel extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function jatah()
+    {
+        return $this->hasOne(JatahPegawaiModel::class, 'id_pegawai', 'id_pegawai');
+    }
+
     // Override method untuk authentication menggunakan no_pegawai
     // public function username()
     // {

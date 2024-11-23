@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AbsensiModel;
+use App\Models\JatahPegawaiModel;
 use App\Models\PegawaiModel;
 use Carbon\Carbon;
 
@@ -12,8 +13,8 @@ class ApiHomeController extends Controller
     public function getTodaysAttendance(Request $request)
     {
         // Set timezone to Asia/Jakarta
-        date_default_timezone_set('Asia/Jakarta');
-        Carbon::setLocale('id');
+        // date_default_timezone_set('Asia/Jakarta');
+        // Carbon::setLocale('id');
 
         // Get the current date in Indonesian timezone
         $today = Carbon::now()->toDateString();
@@ -61,6 +62,38 @@ class ApiHomeController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $user
+        ], 200);
+    }
+
+    public function getRemainingQuota(Request $request)
+    {
+        // Ambil id_pegawai dari request
+        $idPegawai = $request->input('id_pegawai');
+
+        // Ambil tahun saat ini
+        $currentYear = Carbon::now()->year;
+
+        // Query untuk mendapatkan sisa WFA dan cuti menggunakan model
+        $quotaData = JatahPegawaiModel::where('id_pegawai', $idPegawai)
+            ->where('tahun', $currentYear)
+            ->select('sisa_wfa', 'sisa_cuti')
+            ->first();
+
+        // Periksa apakah data ditemukan
+        if (!$quotaData) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Quota data not found for the specified employee and year',
+            ], 404);
+        }
+
+        // Return data sebagai JSON response
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'sisa_wfa' => $quotaData->sisa_wfa,
+                'sisa_cuti' => $quotaData->sisa_cuti,
+            ],
         ], 200);
     }
 }
