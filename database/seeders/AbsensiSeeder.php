@@ -12,19 +12,25 @@ class AbsensiSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create('id_ID');
+        $today = Carbon::today()->format('Y-m-d'); // Tanggal hari ini
 
-        for ($i = 0; $i < 20; $i++) {
+        // Ambil daftar ID pegawai dari database
+        $pegawaiIds = DB::table('pegawai')->pluck('id_pegawai');
+
+        foreach ($pegawaiIds as $idPegawai) {
             $status_absen = $faker->randomElement(['Hadir', 'Izin']);
-            $waktu_masuk = $status_absen === 'Hadir' ? Carbon::parse($faker->dateTimeBetween('08:00', '09:00')->format('Y-m-d H:i:s')) : null;
-            $waktu_keluar = $status_absen === 'Hadir' ? Carbon::parse($faker->dateTimeBetween('17:00', '18:00')->format('Y-m-d H:i:s')) : null;
+            $waktu_masuk = $status_absen === 'Hadir' ? Carbon::createFromTime($faker->numberBetween(8, 9), $faker->numberBetween(0, 59), 0) : null;
+            // Set waktu_keluar menjadi null
+            $waktu_keluar = null;
             $id_izin = $status_absen === 'Izin' ? $faker->randomElement([1, 2]) : null; // 1: Sakit, 2: Cuti
 
+            // Insert absensi untuk pegawai
             DB::table('absensi')->insert([
-                'id_pegawai' => $faker->numberBetween(1, 3), // Angka pegawai antara 1-3
+                'id_pegawai' => $idPegawai,
                 'id_izin' => $id_izin,
-                'tanggal' => $faker->dateTimeThisMonth()->format('Y-m-d'),
+                'tanggal' => $today,
                 'waktu_masuk' => $waktu_masuk,
-                'waktu_keluar' => $waktu_keluar,
+                'waktu_keluar' => $waktu_keluar,  // Nilai waktu_keluar selalu null
                 'status_absen' => $status_absen,
                 'foto_absen' => null, // Bisa tambahkan logika untuk foto jika diperlukan
                 'lokasi_absen' => $faker->city,

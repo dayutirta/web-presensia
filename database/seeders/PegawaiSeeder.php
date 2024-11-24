@@ -26,12 +26,24 @@ class PegawaiSeeder extends Seeder
             'foto' => null,
             'created_at' => now(),
             'updated_at' => now(),
-        ], 'id_pegawai'); 
+        ], 'id_pegawai'); // Menentukan kolom primary key untuk PostgreSQL
+
+        // Tambahkan jatah untuk HRD
+        DB::table('jatah_pegawai')->insert([
+            'id_pegawai' => $hrdId,
+            'jatah_wfa' => 12,
+            'jatah_cuti' => 12,
+            'sisa_wfa' => 12,
+            'sisa_cuti' => 12,
+            'tahun' => now()->year,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         // Insert Supervisors
         $supervisors = [];
         for ($i = 0; $i < 4; $i++) {
-            $supervisors[] = DB::table('pegawai')->insertGetId([
+            $supervisorId = DB::table('pegawai')->insertGetId([
                 'id_level' => 2,
                 'nama_pegawai' => $faker->name,
                 'no_pegawai' => $faker->unique()->numberBetween(101, 199),
@@ -43,12 +55,26 @@ class PegawaiSeeder extends Seeder
                 'foto' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ], 'id_pegawai'); 
+            ], 'id_pegawai'); // Menentukan kolom primary key
+
+            // Tambahkan jatah untuk Supervisor
+            DB::table('jatah_pegawai')->insert([
+                'id_pegawai' => $supervisorId,
+                'jatah_wfa' => 12,
+                'jatah_cuti' => 12,
+                'sisa_wfa' => 12,
+                'sisa_cuti' => 12,
+                'tahun' => now()->year,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $supervisors[] = $supervisorId;
         }
 
         // Insert Staff
         for ($i = 0; $i < 16; $i++) {
-            DB::table('pegawai')->insert([
+            $staffId = DB::table('pegawai')->insertGetId([
                 'id_level' => 3,
                 'nama_pegawai' => $faker->name,
                 'no_pegawai' => $faker->unique()->numberBetween(200, 999),
@@ -58,6 +84,18 @@ class PegawaiSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'boss' => $faker->randomElement($supervisors), // Staff melapor ke salah satu Supervisor
                 'foto' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ], 'id_pegawai'); // Menentukan kolom primary key
+
+            // Tambahkan jatah untuk Staff
+            DB::table('jatah_pegawai')->insert([
+                'id_pegawai' => $staffId,
+                'jatah_wfa' => 12,
+                'jatah_cuti' => 12,
+                'sisa_wfa' => 12,
+                'sisa_cuti' => 12,
+                'tahun' => now()->year,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

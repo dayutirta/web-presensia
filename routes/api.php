@@ -18,7 +18,9 @@ Route::middleware('auth:api')->group(function () {
 
 Route::post('/home/today', [ApiHomeController::class, 'getTodaysAttendance']);
 Route::post('/home/user', [ApiHomeController::class, 'getUser']);
+Route::post('/home/quota', [ApiHomeController::class, 'getRemainingQuota']);
 
 Route::apiResource('absensi', ApiAbsensiController::class);
 
 Route::get('/history', [ApiAbsensiController::class, 'history']);
+
