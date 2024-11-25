@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('absensi', function (Blueprint $table) {
-            $table->id('id_absen');
+            $table->id('id_absensi');
             $table->unsignedBigInteger('id_pegawai'); // Tipe data foreign key
             $table->unsignedBigInteger('id_izin')->nullable(); // Tipe data foreign key, nullable
 
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('waktu_masuk')->nullable();
             $table->timestamp('waktu_keluar')->nullable();
             $table->string('status_absen', 50);
-            $table->binary('foto_absen')->nullable();
+            $table->string('foto_absen')->nullable();
             $table->string('lokasi_absen', length: 100);
 
             $table->timestamps(); // created_at & updated_at

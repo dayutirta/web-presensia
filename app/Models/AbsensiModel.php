@@ -16,8 +16,6 @@ class AbsensiModel extends Authenticatable
 
     protected $guarded = [
         'id_absensi',
-        'id_perizinan',
-        'id_pegawai',
     ];
 
     public function bansos()

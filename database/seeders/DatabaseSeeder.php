@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             levelseeder::class,
             PegawaiSeeder::class,
             PerizinanSeeder::class,
-            AbsensiSeeder::class,
+            // AbsensiSeeder::class,
         ]);
     }
 }
