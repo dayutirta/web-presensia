@@ -24,6 +24,6 @@ class AbsensiModel extends Authenticatable
     }
     public function user()
     {
-        return $this->belongsTo(PerizinanModel::class, 'id_perizinan', 'id_perizinan');
+        return $this->belongsTo(PerizinanModel::class, 'id_izin', 'id_izin');
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiAbsensiController;
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiHomeController;
 use App\Http\Controllers\ApiPresensiController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiPermitController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -25,5 +26,7 @@ Route::post('/presensi/store', [ApiPresensiController::class, 'store']);
 Route::post('/presensi/update', [ApiPresensiController::class, 'update']);
 
 Route::apiResource('absensi', ApiAbsensiController::class);
-
 Route::get('/history', [ApiAbsensiController::class, 'history']);
+
+Route::post('/permit/store', [ApiPermitController::class, 'store']);
+Route::get('/permit/history', [ApiPermitController::class, 'history']);
