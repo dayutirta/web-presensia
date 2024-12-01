@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiAbsensiController;
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiHomeController;
 use App\Http\Controllers\ApiPresensiController;
+use App\Http\Controllers\ApiProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +13,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('register', [ApiAuthController::class, 'register']);
+Route::post('registerImage', [ApiAuthController::class, 'registerImage']);
 Route::post('login', [ApiAuthController::class, 'login']);
+// Route::post('logout', [ApiAuthController::class, 'logout']);
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [ApiAuthController::class, 'logout']);
 });
@@ -27,3 +30,5 @@ Route::post('/presensi/update', [ApiPresensiController::class, 'update']);
 Route::apiResource('absensi', ApiAbsensiController::class);
 
 Route::get('/history', [ApiAbsensiController::class, 'history']);
+
+Route::post('/password/update', [ApiProfileController::class, 'updatePassword']);
