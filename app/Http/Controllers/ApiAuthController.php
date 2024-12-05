@@ -11,13 +11,51 @@ use Illuminate\Support\Facades\Validator;
 class ApiAuthController extends Controller
 {
 
+    // public function registerImage(Request $request)
+    // {
+    //     // Validasi input
+    //     $request->validate([
+    //         'id_pegawai' => 'required',
+    //         'files' => 'required|array',  // Pastikan ada tepat 5 file
+    //         // 'files.*' => 'mimes:jpg',  // Validasi setiap file (maksimal 10MB)
+    //     ]);
+
+    //     try {
+    //         // Ambil ID Pegawai
+    //         $idPegawai = $request->input('id_pegawai');
+
+    //         // Loop melalui setiap file dan simpan
+    //         $paths = [];
+    //         foreach ($request->file('files') as $file) {
+    //             $path = $file->store('absensi/' . $idPegawai, 'public');  // Simpan file dalam folder berdasarkan id_pegawai
+    //             $paths[] = $path;  // Simpan path file ke dalam array
+    //         }
+
+    //         // Response sukses
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Files uploaded successfully',
+    //             'data' => [
+    //                 'id_pegawai' => $idPegawai,
+    //                 'file_paths' => $paths,
+    //             ],
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         // Response error
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Failed to upload files',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
     public function registerImage(Request $request)
     {
         // Validasi input, misalnya memastikan ada id_pegawai dan file yang diupload
         $request->validate([
             'id_pegawai' => 'required|string',
-            'files' => 'required|array|min:5|max:5',  // Pastikan ada tepat 5 file
-            'files.*' => 'mimes:jpg,jpeg,png|max:10240',  // Validasi setiap file (maksimal 10MB)
+            'files' => 'required|array',  // Pastikan ada tepat 5 file
         ]);
 
         // Ambil id_pegawai dan files dari request
