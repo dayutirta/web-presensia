@@ -38,12 +38,31 @@ class PerizinanController extends Controller
                         <a href="' . url('/perizinan/' . $perizinan->id_perizinan . '/edit') . '" class="btn btn-outline-secondary" title="Edit">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <a href="' . url('/perizinan/' . $perizinan->id_perizinan . '/ubah_status') . '" class="btn btn-outline-danger" title="Delete">
+                        <a href="' . url('/perizinan/' . $perizinan->id_perizinan . '/destroy') . '" class="btn btn-outline-danger" title="Delete">
                             <i class="fas fa-trash-alt"></i> Hapus
                         </a>
                     </div>';
+
+            return $buttons;
         })
-        ->rawColumns(['aksi'])
+        ->addColumn('ubah_status', function($perizinan) {
+            // Cek status dan tampilkan tombol Terima/Tolak
+            $buttons = '';
+            if ($perizinan->status_izin == 'Pending') {
+                $buttons .= '<form action="/perizinan/' . $perizinan->id_izin . '/accept" method="POST" style="display: inline;">
+                                ' . csrf_field() . '
+                                <button type="submit" class="btn btn-outline-success btn-sm">Terima</button>
+                            </form>';
+                $buttons .= '<form action="/perizinan/' . $perizinan->id_izin . '/reject" method="POST" style="display: inline;">
+                                ' . csrf_field() . '
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Tolak</button>
+                            </form>';
+            } else {
+                $buttons .= '<span class="badge bg-secondary">' . $perizinan->status_izin . '</span>';
+            }
+            return $buttons;
+        })
+        ->rawColumns(['ubah_status'], ['aksi'])
         ->make(true);
     }
     
@@ -63,6 +82,25 @@ class PerizinanController extends Controller
             'rt' => $rt
         ]);
     }
+
+    public function accept($id)
+    {
+        $perizinan = PerizinanModel::findOrFail($id);
+        $perizinan->status_izin = 'Diterima';
+        $perizinan->save();
+
+        return redirect()->route('perizinan.index')->with('success', 'Perizinan diterima');
+    }
+
+    public function reject($id)
+    {
+        $perizinan = PerizinanModel::findOrFail($id);
+        $perizinan->status_izin = 'Ditolak';
+        $perizinan->save();
+
+        return redirect()->route('perizinan.index')->with('error', 'Perizinan ditolak');
+    }
+
 
     public function store(Request $request)
     {
@@ -121,16 +159,28 @@ class PerizinanController extends Controller
         return redirect('/perizinan')->with('success', 'Data berhasil ditambahkan');
     }
     
-    public function show(String $id)
-    {  
-        $perizinan = PerizinanModel::with('level')->where('id_perizinan', $id)->first();
-        $boss=$perizinan->boss;
+    // public function show(String $id)
+    // {  
+    //     $perizinan = PerizinanModel::with('level')->where('id_izin', $id)->first();
+    //     $boss=$perizinan->boss;
 
-        $spv = PerizinanModel::with('level')->where('boss', $boss)->get();
-        return view('hrd.perizinan.detail', [
-            'spv' => $spv,
-            'perizinan' => $perizinan,
-        ]);
+    //     $spv = PerizinanModel::with('level')->where('boss', $boss)->get();
+    //     return view('hrd.perizinan.detail', [
+    //         'spv' => $spv,
+    //         'perizinan' => $perizinan,
+    //     ]);
+    // }
+
+    public function show($id)
+    {
+        // Pastikan data diambil beserta relasi pegawai
+        $perizinan = PerizinanModel::with('pegawai')->find($id);
+
+        if (!$perizinan) {
+            return redirect('/perizinan')->with('error', 'Data perizinan tidak ditemukan.');
+        }
+
+        return view('perizinan.show', ['perizinan' => $perizinan]);
     }
 
     public function edit(String $id)
@@ -212,4 +262,17 @@ class PerizinanController extends Controller
     
         return redirect('/perizinan')->with('success', 'Data berhasil diubah');
     }
+
+    public function destroy($id)
+    {
+        $perizinan = PerizinanModel::find($id);
+
+        if (!$perizinan) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
+        $perizinan->delete();
+        return response()->json(['message' => 'Data berhasil dihapus']);
+    }
+
 }

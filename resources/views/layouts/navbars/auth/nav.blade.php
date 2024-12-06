@@ -15,7 +15,7 @@
             <div class="nav-item dropdown">
                 <a href="javascript:;" class="nav-link text-body font-weight-bold px-0 me-3" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-user me-sm-1"></i>
-                    <span class="d-sm-inline d-none">[NAMA]</span>
+                    <span class="d-sm-inline d-none">{{ Auth::user()->nama_pegawai }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="profileDropdown">
                     <li>
