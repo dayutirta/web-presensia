@@ -45,10 +45,12 @@ Route::group(['prefix' => 'pegawai'], function() {
 });
 
 Route::group(['prefix' => 'perizinan'], function() {
-    Route::get('/', [PerizinanController::class, 'index']);          
+    Route::get('/', [PerizinanController::class, 'index'])->name('perizinan.index');          
     Route::post('/list', [PerizinanController::class, 'list']);
-    Route::get('/accept/{id}', [PerizinanController::class, 'accept']);
-    Route::get('/reject/{id}', [PerizinanController::class, 'reject']);        
+    Route::get('/{id}', [PerizinanController::class, 'show']);
+    Route::post('/{id}/accept', [PerizinanController::class, 'accept']);
+    Route::post('/{id}/reject', [PerizinanController::class, 'reject']);
+    Route::delete('/{id}', [PerizinanController::class, 'destroy']);   
 });
 
 Route::group(['prefix' => 'absensi'], function() {
