@@ -71,7 +71,7 @@ class ApiPresensiController extends Controller
             ];
 
             // Kirim gambar ke API FastAPI untuk dikenali wajahnya
-            $response = $client->post('http://192.168.11.163:8000/recognize_face/', [
+            $response = $client->post('http://194.233.83.198:8000/recognize_face/', [
                 'multipart' => $multipart
             ]);
 
@@ -164,5 +164,36 @@ class ApiPresensiController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function history(Request $request)
+    {
+        // Ambil parameter id_pegawai dari request
+        $idPegawai = $request->input('id_pegawai');
+
+        // Validasi apakah id_pegawai ada
+        if (!$idPegawai) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'id_pegawai tidak ditemukan dalam request'
+            ], 400);
+        }
+
+        // Query data absensi berdasarkan id_pegawai
+        $attendanceData = AbsensiModel::where('id_pegawai', $idPegawai)->get();
+
+        // Periksa apakah ada data
+        if ($attendanceData->isEmpty()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Tidak ada data absensi yang ditemukan untuk id_pegawai ini'
+            ], 200);
+        }
+
+        // Berikan respons data
+        return response()->json([
+            'status' => 'success',
+            'data' => $attendanceData
+        ], 200);
     }
 }

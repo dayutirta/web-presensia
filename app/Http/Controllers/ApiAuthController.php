@@ -82,7 +82,7 @@ class ApiAuthController extends Controller
 
         try {
             // Kirim permintaan POST ke FastAPI
-            $response = $client->post('http://192.168.11.163:8000/add_pegawai/', [
+            $response = $client->post('http://194.233.83.198:8000/add_pegawai/', [
                 'multipart' => $multipart,
                 'query' => $query
             ]);
@@ -128,26 +128,36 @@ class ApiAuthController extends Controller
                 ], 404);
             }
 
-            // Update data pegawai
+            // Cek apakah status pegawai sudah true
+            if ($pegawai->status == true) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Pegawai sudah terdaftar, register tidak dapat dilakukan',
+                ], 400);
+            }
+
+            // Register pegawai dan update kolom status menjadi true
             $pegawai->update([
                 'alamat' => $request->alamat,
                 'nohp' => $request->nohp,
                 'password' => Hash::make($request->password),
+                'status' => true, // Set status menjadi true setelah register
             ]);
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Pegawai updated successfully',
+                'message' => 'Pegawai registered successfully',
                 'pegawai' => $pegawai,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Error during update',
+                'message' => 'Error during register',
                 'error' => $e->getMessage(),
             ]);
         }
     }
+
 
 
 

@@ -27,10 +27,10 @@ Route::post('/home/quota', [ApiHomeController::class, 'getRemainingQuota']);
 
 Route::post('/presensi/store', [ApiPresensiController::class, 'store']);
 Route::post('/presensi/update', [ApiPresensiController::class, 'update']);
-
-Route::apiResource('absensi', ApiAbsensiController::class);
-Route::get('/history', [ApiAbsensiController::class, 'history']);
+Route::get('/presensi/history', [ApiPresensiController::class, 'history']);
 
 Route::post('/password/update', [ApiProfileController::class, 'updatePassword']);
+Route::post('/profile/update', [ApiProfileController::class, 'updateFoto']);
+
 Route::post('/permit/store', [ApiPermitController::class, 'store']);
 Route::get('/permit/history', [ApiPermitController::class, 'history']);

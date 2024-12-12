@@ -67,4 +67,62 @@ class ApiProfileController extends Controller
             ], 500);
         }
     }
+
+    public function updateFoto(Request $request)
+    {
+        // Validasi input
+        $validator = Validator::make($request->all(), [
+            'id_pegawai' => 'required',  // Validasi id_pegawai
+            'foto' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',  // Validasi foto (gambar)
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            // Cari pegawai berdasarkan ID
+            $pegawai = PegawaiModel::find($request->id_pegawai);
+
+            if (!$pegawai) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Pegawai tidak ditemukan',
+                ], 404);
+            }
+
+            // Periksa apakah file foto ada di request
+            if ($request->hasFile('foto')) {
+                // Ambil file gambar yang diunggah
+                $foto = $request->file('foto');
+
+                // Simpan gambar ke storage dan dapatkan nama file
+                $fotoPath = $foto->store('public/foto_profil'); // Simpan di folder foto_profil
+
+                // Ambil nama file dari path yang disimpan
+                $fotoName = basename($fotoPath);
+
+                // Update kolom foto di database
+                $pegawai->foto = $fotoName;
+                $pegawai->save();
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Foto berhasil diubah',
+                'data' => [
+                    'foto' => $fotoName
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

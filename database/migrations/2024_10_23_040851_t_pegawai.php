@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('alamat', 255);
             $table->string('nohp', 20);
             $table->string('password');
-            $table->binary('foto')->nullable();
+            $table->string('foto')->nullable();
+            $table->boolean('status')->default(false); // Kolom status ditambahkan di sini
             $table->timestamps();
 
             $table->foreign('id_level')->references('id_level')->on('level')->onDelete('cascade');
