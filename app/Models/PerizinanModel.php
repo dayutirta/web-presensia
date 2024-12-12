@@ -16,7 +16,7 @@ class PerizinanModel extends Model
         'id_izin', // You can keep other fields in $guarded like this
     ];
 
-    public function bantuan()
+    public function pegawai()
     {
         return $this->belongsTo(PegawaiModel::class, 'id_pegawai', 'id_pegawai');
     }

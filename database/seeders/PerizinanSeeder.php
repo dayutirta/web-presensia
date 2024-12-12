@@ -16,9 +16,9 @@ class PerizinanSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             $tanggal_mulai = $faker->dateTimeThisYear();
             $tanggal_akhir = (clone $tanggal_mulai)->modify('+'. $faker->numberBetween(1, 5) .' days');
-            $jenis_izin = $faker->randomElement(['Sakit', 'Cuti', 'WFH']);
-            $status_izin = $faker->randomElement(['Disetujui', 'Ditolak']);
-            $keterangan = $jenis_izin === 'Sakit' ? 'Sakit ' . $faker->word : ($jenis_izin === 'Cuti' ? 'Liburan' : 'Work From Home');
+            $jenis_izin = $faker->randomElement(['Sakit', 'Cuti', 'WFA']);
+            $status_izin = $faker->randomElement(['Disetujui', 'Pending', 'Ditolak']);
+            $keterangan = $jenis_izin === 'Sakit' ? 'Sakit ' . $faker->word : ($jenis_izin === 'Cuti' ? 'Liburan' : 'Work From Anywhere');
 
             DB::table('perizinan')->insert([
                 'id_pegawai' => $faker->numberBetween(1, 3), // Mengacu pada pegawai dengan id 1-3

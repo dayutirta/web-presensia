@@ -1,90 +1,148 @@
 @extends('layouts.user_type.auth')
 
 @section('content')
-    <div class="card card-outline card-primary">
-        <div class="card-header">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <h5 class="mb-0">Data Absensi</h5>
-            </div>
+<div class="card card-outline card-primary">
+    {{-- <div class="card-header">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <h5 class="mb-0">Data Perizinan</h5>
+            <a href="{{ url('/perizinan/create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Tambah Perizinan
+            </a>
         </div>
-        <div class="card-body">
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
-            <div class="table-responsive"> 
-                <table class="table table-bordered table-striped table-hover table-sm" id="table_pegawai">
-                    <thead>
-                        <tr>
-                            <th>Nomor</th>
-                            <th>Nomor Pegawai</th>
-                            <th>Nama Pegawai</th>
-                            <th>Jabatan</th>
-                            <th>No Telepon</th>
-                            <th>Alamat</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-            
+    </div> --}}
+    <div class="card-body">
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_perizinan">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pegawai</th>
+                        <th>Jabatan</th>
+                        <th>Tanggal Izin</th>
+                        <th>Alasan</th>
+                        <th>Status</th>
+                        <th>Ubah Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
+</div>
 @endsection
 
 @push('css')
-    <style>
-        @media (max-width: 575.98px) { 
-            .col-form-label {
-                text-align: left !important;
-            }
+<style>
+    @media (max-width: 575.98px) { 
+        .col-form-label {
+            text-align: left !important;
         }
-    </style>
+    }
+</style>
 @endpush
 
 @push('js')
-    <script>
-        $(document).ready(function() {
-            var table = $('#table_pegawai').DataTable({
-                serverSide: true,
-                ajax: {
-                    url: "{{ url('pegawai/list') }}",
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    data: function(d) {
-                        d.jabatan = $('#jabatan').val();
+<script>
+    $(document).ready(function() {
+        var table = $('#table_perizinan').DataTable({
+            serverSide: true,
+            ajax: {
+                url: "{{ url('/perizinan/list') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, responsivePriority: 1 },
+                { data: 'pegawai.nama_pegawai', name: 'pegawai.nama_pegawai', responsivePriority: 2 },
+                { data: 'pegawai.jabatan', name: 'pegawai.jabatan', responsivePriority: 3 },
+                { data: 'tanggal_mulai', name: 'tanggal_mulai', responsivePriority: 4 },
+                { data: 'keterangan', name: 'keterangan', responsivePriority: 5 },
+                { data: 'status_izin', name: 'status_izin'},
+                {
+                    data: 'ubah_status',
+                    name: 'ubah_status',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        let buttons = '';
+
+                        if (row.status_izin === 'Pending') {
+                            buttons = `
+                                <form action="/perizinan/${row.id_izin}/accept" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-success btn-sm">Terima</button>
+                                </form>
+                                <form action="/perizinan/${row.id_izin}/reject" method="POST" style="display: inline;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Tolak</button>
+                                </form>
+                            `;
+                        } else {
+                            buttons = `<span class="badge bg-secondary">${row.status_izin}</span>`;
+                        }
+
+                        return buttons;
                     }
                 },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, responsivePriority: 2 },
-                    { data: 'no_pegawai', name: 'no_pegawai',searchable: true, responsivePriority: 4 },
-                    { data: 'nama_pegawai', name: 'nama_pegawai',searchable: true, responsivePriority: 1 }, 
-                    { data: 'jabatan', name: 'jabatan',searchable: true, responsivePriority: 3 },
-                    { data: 'nohp', name: 'nohp',searchable: true, responsivePriority: 5 },
-                    { data: 'alamat', name: 'alamat',searchable: true, responsivePriority: 6 },
-                    { data: 'aksi', name: 'aksi', orderable: false, searchable: false, responsivePriority: 7 }
-                ],
-                "autoWidth": true,
-                "responsive": true,
-                "ordering":false,
-            });
+                {
+                    data: 'aksi',
+                    name: 'aksi',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row) {
+                        let buttons = `
+                            <div class="btn-group">
+                                <a href="/perizinan/${row.id_izin}" class="btn btn-outline-primary btn-sm">Lihat</a>
+                                <button data-id="${row.id_izin}" class="btn btn-outline-danger btn-sm btn-delete">Hapus</button>
+                            </div>
+                        `;
+                        return buttons;
+                    }
+                }
+            ],
 
-            $('#jabatan').on('change', function() {
-                table.ajax.reload();
-            });
-
-            
-            var resizeTimer;
-            $(window).on('resize', function(e) {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function() {
-                    table.ajax.reload(null, false); 
-                }, 1); 
-            });
+            autoWidth: true,
+            responsive: true,
+            ordering: false,
         });
-    </script>
+
+        var resizeTimer;
+        $(window).on('resize', function(e) {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                table.ajax.reload(null, false); 
+            }, 1); 
+        });
+
+        $(document).on('click', '.btn-delete', function () {
+            var id = $(this).data('id');
+            if (confirm('Yakin ingin menghapus data ini?')) {
+                $.ajax({
+                    url: `/perizinan/${id}`,
+                    type: 'POST',
+                    data: {
+                        _method: 'DELETE',
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        alert(response.message);
+                        $('#table_perizinan').DataTable().ajax.reload();
+                    },
+                    error: function (xhr) {
+                        alert('Terjadi kesalahan: ' + xhr.responseText);
+                    }
+                });
+            }
+        });
+
+    });
+</script>
 @endpush
