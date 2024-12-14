@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('tanggal_akhir');
             $table->text('keterangan');
             $table->string('status_izin', 50);
-            $table->binary('dokumen')->nullable(); // Menyimpan dokumen izin dalam format bytea
+            $table->string('dokumen')->nullable(); // Menyimpan dokumen izin dalam format bytea
             $table->timestamps(); // created_at & updated_at
 
             // Definisi foreign key

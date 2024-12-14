@@ -76,7 +76,7 @@ class ApiHomeController extends Controller
         // Query untuk mendapatkan sisa WFA dan cuti menggunakan model
         $quotaData = JatahPegawaiModel::where('id_pegawai', $idPegawai)
             ->where('tahun', $currentYear)
-            ->select('sisa_wfa', 'sisa_cuti')
+            ->select('sisa_sakit', 'sisa_cuti')
             ->first();
 
         // Periksa apakah data ditemukan
@@ -91,7 +91,7 @@ class ApiHomeController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'sisa_wfa' => $quotaData->sisa_wfa,
+                'sisa_sakit' => $quotaData->sisa_sakit,
                 'sisa_cuti' => $quotaData->sisa_cuti,
             ],
         ], 200);

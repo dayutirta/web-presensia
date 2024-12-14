@@ -31,9 +31,9 @@ class PegawaiSeeder extends Seeder
         // Tambahkan jatah untuk HRD
         DB::table('jatah_pegawai')->insert([
             'id_pegawai' => $hrdId,
-            'jatah_wfa' => 12,
+            'jatah_sakit' => 12,
             'jatah_cuti' => 12,
-            'sisa_wfa' => 12,
+            'sisa_sakit' => 12,
             'sisa_cuti' => 12,
             'tahun' => now()->year,
             'created_at' => now(),
@@ -60,9 +60,9 @@ class PegawaiSeeder extends Seeder
             // Tambahkan jatah untuk Supervisor
             DB::table('jatah_pegawai')->insert([
                 'id_pegawai' => $supervisorId,
-                'jatah_wfa' => 12,
+                'jatah_sakit' => 12,
                 'jatah_cuti' => 12,
-                'sisa_wfa' => 12,
+                'sisa_sakit' => 12,
                 'sisa_cuti' => 12,
                 'tahun' => now()->year,
                 'created_at' => now(),
@@ -91,9 +91,9 @@ class PegawaiSeeder extends Seeder
             // Tambahkan jatah untuk Staff
             DB::table('jatah_pegawai')->insert([
                 'id_pegawai' => $staffId,
-                'jatah_wfa' => 12,
+                'jatah_sakit' => 12,
                 'jatah_cuti' => 12,
-                'sisa_wfa' => 12,
+                'sisa_sakit' => 12,
                 'sisa_cuti' => 12,
                 'tahun' => now()->year,
                 'created_at' => now(),

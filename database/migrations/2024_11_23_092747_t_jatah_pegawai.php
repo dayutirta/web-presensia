@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('id_jatah');
             $table->unsignedBigInteger('id_pegawai');
 
-            $table->integer('jatah_wfa')->default(12);
+            $table->integer('jatah_sakit')->default(12);
             $table->integer('jatah_cuti')->default(12);
-            $table->integer('sisa_wfa')->default(12);
+            $table->integer('sisa_sakit')->default(12);
             $table->integer('sisa_cuti')->default(12);
             $table->year('tahun');
 
