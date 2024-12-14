@@ -71,7 +71,7 @@ class ApiPresensiController extends Controller
             ];
 
             // Kirim gambar ke API FastAPI untuk dikenali wajahnya
-            $response = $client->post('http://194.233.83.198:8000/recognize_face/', [
+            $response = $client->post('http://192.168.11.163:8000/recognize_face/', [
                 'multipart' => $multipart
             ]);
 

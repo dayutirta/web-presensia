@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JatahPegawaiModel;
 use App\Models\PerizinanModel;
 use Illuminate\Http\Request;
 
@@ -27,9 +28,33 @@ class ApiPermitController extends Controller
         }
 
         try {
-            $dokumenPath = null;
+            // Cek sisa izin berdasarkan jenis izin
+            $pegawai = JatahPegawaiModel::where('id_pegawai', $request->id_pegawai)->first();
+
+            if (!$pegawai) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Data pegawai tidak ditemukan.',
+                ], 404);
+            }
+
+            // Pengecekan sisa izin berdasarkan jenis izin
+            if ($request->jenis_izin === 'Sakit' && $pegawai->sisa_sakit <= 0) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Jatah sakit pegawai habis.',
+                ], 400);
+            }
+
+            if ($request->jenis_izin === 'Cuti' && $pegawai->sisa_cuti <= 0) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Jatah cuti pegawai habis.',
+                ], 400);
+            }
 
             // Jika dokumen diunggah, simpan di storage dan ambil path-nya
+            $dokumenPath = null;
             if ($request->hasFile('dokumen')) {
                 $dokumenPath = $request->file('dokumen')->store('dokumen', 'public'); // Menyimpan dokumen ke storage/public/dokumen
             }
@@ -60,6 +85,7 @@ class ApiPermitController extends Controller
             ], 500);
         }
     }
+
 
     // public function store(Request $request)
     // {

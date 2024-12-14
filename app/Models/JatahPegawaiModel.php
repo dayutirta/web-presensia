@@ -13,9 +13,9 @@ class JatahPegawaiModel extends Model
     protected $primaryKey = 'id_jatah';
     protected $fillable = [
         'id_pegawai',
-        'jatah_wfa',
+        'jatah_sakit',
         'jatah_cuti',
-        'sisa_wfa',
+        'sisa_sakit',
         'sisa_cuti',
         'tahun',
     ];
