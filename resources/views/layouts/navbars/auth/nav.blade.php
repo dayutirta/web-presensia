@@ -7,11 +7,9 @@
             <h6 class="font-weight-bolder d-inline mb-0 text-capitalize">{{ str_replace('-', ' ', Request::path()) }}</h6>
         </nav>
         <nav aria-label="breadcrumb" ></nav>
-
         <!-- Navbar Right Section -->
         <div class="d-flex align-items-center">
             <!-- Sign Out Button -->
-
             <div class="nav-item dropdown">
                 <a href="javascript:;" class="nav-link text-body font-weight-bold px-0 me-3" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-user me-sm-1"></i>
@@ -38,10 +36,6 @@
                     </li>
                 </ul>
             </div>
-
-
-
-
             <!-- Notification Dropdown -->
             <div class="nav-item dropdown">
                 <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -69,7 +63,6 @@
                     <!-- Additional Notification Items -->
                 </ul>
             </div>
-
             <!-- Sidenav Toggler for Small Screens -->
             <a href="javascript:;" class="nav-link text-body p-0 d-xl-none ms-3" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">
@@ -81,4 +74,3 @@
         </div>
     </div>
 </nav>
-<!-- End Navbar -->
