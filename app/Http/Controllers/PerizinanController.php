@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\PerizinanModel;
+use App\Models\AbsensiModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -71,6 +72,17 @@ class PerizinanController extends Controller
         $perizinan->status_izin = 'Disetujui';
         $perizinan->save();
 
+        // Menambahkan data absensi
+        $absensi = new AbsensiModel();
+        $absensi->id_pegawai = $perizinan->id_pegawai;  // Mengambil id_pegawai dari perizinan
+        $absensi->id_izin = $perizinan->id_izin;  // Mengambil id_izin dari perizinan
+        $absensi->tanggal = $perizinan->tanggal_mulai;  // Mengambil tanggal mulai dari perizinan
+        $absensi->status_absen = $perizinan->jenis_izin;  // Menggunakan jenis izin sebagai status_absen
+        $absensi->waktu_masuk = null;  // Masukkan null karena belum ada waktu masuk
+        $absensi->waktu_keluar = null;  // Masukkan null karena belum ada waktu keluar
+        $absensi->foto_absen = null;  // Masukkan null karena belum ada foto absen
+        $absensi->lokasi_absen = null;  // Masukkan null karena belum ada lokasi absen
+        $absensi->save();  // Simpan data absensi ke database
         return redirect()->route('perizinan.index')->with('success', 'Perizinan diterima');
     }
     public function reject($id)
