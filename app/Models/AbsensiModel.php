@@ -17,13 +17,12 @@ class AbsensiModel extends Authenticatable
     protected $guarded = [
         'id_absensi',
     ];
-
-    public function bansos()
-    {
-        return $this->belongsTo(PegawaiModel::class, 'id_pegawai', 'id_pegawai');
-    }
-    public function user()
+    public function izin()
     {
         return $this->belongsTo(PerizinanModel::class, 'id_izin', 'id_izin');
+    }
+    public function pegawai()
+    {
+        return $this->belongsTo(PegawaiModel::class, 'id_pegawai', 'id_pegawai');
     }
 }
