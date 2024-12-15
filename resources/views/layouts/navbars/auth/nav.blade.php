@@ -16,7 +16,7 @@
                     <span class="d-sm-inline d-none">{{ Auth::user()->nama_pegawai }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3" aria-labelledby="profileDropdown">
-                    <li>
+                    {{-- <li>
                         <a href="{{ url('/profile') }}" class="dropdown-item">
                             <i class="fa fa-user me-sm-1"></i>
                             <span class="d-sm-inline d-none">Profile</span>
@@ -27,7 +27,7 @@
                             <i class="fa fa-user me-sm-1"></i>
                             <span class="d-sm-inline d-none">Registrasi</span>
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="{{ url('/logout') }}" class="dropdown-item">
                             <i class="fas fa-sign-out-alt me-sm-1"></i>
@@ -37,7 +37,7 @@
                 </ul>
             </div>
             <!-- Notification Dropdown -->
-            <div class="nav-item dropdown">
+            {{-- <div class="nav-item dropdown">
                 <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa fa-bell cursor-pointer"></i>
                 </a>
@@ -62,7 +62,7 @@
                     </li>
                     <!-- Additional Notification Items -->
                 </ul>
-            </div>
+            </div> --}}
             <!-- Sidenav Toggler for Small Screens -->
             <a href="javascript:;" class="nav-link text-body p-0 d-xl-none ms-3" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">

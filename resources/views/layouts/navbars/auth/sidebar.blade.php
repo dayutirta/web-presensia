@@ -35,7 +35,7 @@
       <li class="nav-item pb-2">
         <a class="nav-link {{ Request::is('perizinan') ? 'active' : '' }}" href="{{ url('perizinan') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md {{ Request::is('perizinan') ? 'bg-primary' : 'bg-white' }} text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-table" style="font-size: 1rem; color: {{ Request::is('perizinan') ? '#ffffff' : '#000000' }};" aria-hidden="true"></i>
+            <i class="fas fa-user-pen" style="font-size: 1rem; color: {{ Request::is('perizinan') ? '#ffffff' : '#000000' }};" aria-hidden="true"></i>
           </div>
           <span class="nav-link-text ms-1">Manajemen Izin</span>
         </a>
@@ -43,21 +43,12 @@
       <li class="nav-item pb-2">
         <a class="nav-link {{ Request::is('absensi') ? 'active' : '' }}" href="{{ url('absensi') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md {{ Request::is('absensi') ? 'bg-primary' : 'bg-white' }} text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-table" style="font-size: 1rem; color: {{ Request::is('absensi') ? '#ffffff' : '#000000' }};" aria-hidden="true"></i>
+            <i class="fas fa-calendar-alt" style="font-size: 1rem; color: {{ Request::is('absensi') ? '#ffffff' : '#000000' }};" aria-hidden="true"></i>
           </div>
           <span class="nav-link-text ms-1">Manajemen Absensi</span>
         </a>
       </li>
-      {{-- @if (Auth::user()->id_level == 1)
-      <li class="nav-item pb-2">
-        <a class="nav-link {{ Request::is('gaji') ? 'active' : '' }}" href="{{ url('gaji') }}">
-          <div class="icon icon-shape icon-sm shadow border-radius-md {{ Request::is('gaji') ? 'bg-primary' : 'bg-white' }} text-center me-2 d-flex align-items-center justify-content-center">
-            <i class="fas fa-file-invoice-dollar" style="font-size: 1rem; color: {{ Request::is('gaji') ? '#ffffff' : '#000000' }};" aria-hidden="true"></i>
-          </div>
-          <span class="nav-link-text ms-1">Management Gaji</span>
-        </a>
-      </li>
-      @endif --}}
+      
     </ul>
   </div>
 </aside>

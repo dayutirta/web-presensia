@@ -19,18 +19,15 @@ Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'proses_login'])->name('proses_login');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Rute untuk halaman form "Lupa Password"
+// Rute untuk halaman form "Lupa Password" tapi gajadi dipake
 Route::get('login/forgot-password', function () {
-    return view('session.reset-password.resetPassword'); // Sesuaikan dengan nama view Anda
+    return view('session.reset-password.resetPassword'); 
 })->name('forgot-password');
 Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.reset');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['cek_login:1']], function () {
 		Route::get('/hrd/dashboard', [UserController::class, 'index'])->name('hrd.dashboard');
-    });
-    Route::group(['middleware' => ['cek_login:2']], function () {
-        Route::get('/spv/dashboard', [UserController::class, 'index'])->name('spv.dashboard');
     });
 });
 
@@ -41,7 +38,8 @@ Route::group(['prefix' => 'pegawai'], function() {
     Route::post('/', [PegawaiController::class, 'store']);         
     Route::get('/{id}', [PegawaiController::class, 'show']);
     Route::get('/{id}/edit', [PegawaiController::class, 'edit']);  
-    Route::put('/{id}', [PegawaiController::class, 'update']);         
+    Route::put('/{id}', [PegawaiController::class, 'update']);
+    Route::get('/{id}/hapus', [PegawaiController::class, 'hapus']);     
 });
 
 Route::group(['prefix' => 'perizinan'], function() {
@@ -55,8 +53,5 @@ Route::group(['prefix' => 'perizinan'], function() {
 
 Route::group(['prefix' => 'absensi'], function() {
     Route::get('/', [AbsensiController::class, 'index']);          
-    Route::post('/list', [AbsensiController::class, 'list']);
-    Route::get('/{id}', [AbsensiController::class, 'show']);
-    Route::get('/{id}/edit', [AbsensiController::class, 'edit']);  
-    Route::put('/{id}', [AbsensiController::class, 'update']);         
+    Route::post('/list', [AbsensiController::class, 'list']);       
 });

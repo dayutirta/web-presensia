@@ -82,11 +82,11 @@
                   </div>
                 </form>
               </div>
-              <div class="card-footer text-center pt-0">
+              {{-- <div class="card-footer text-center pt-0">
                 <small class="text-muted">Lupa Password?  
                   <a href="javascript:void(0)" class="text-info text-gradient font-weight-bold" onclick="showResetPage()">Reset Disini</a>
                 </small>
-              </div>
+              </div> --}}
             </div>
           </div>
           <div class="col-xl-4 col-lg-5 col-md-6 hidden" id="reset-page">
