@@ -62,6 +62,7 @@ class UserController extends Controller
         $pegawaiHadirHariIni = DB::table('absensi')
             ->where('status_absen', 'Hadir')
             ->whereDate('tanggal', Carbon::today())
+            ->distinct('id_pegawai')
             ->count();
 
         // Ambil total perizinan yang pending

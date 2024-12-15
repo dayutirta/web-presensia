@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('waktu_keluar')->nullable();
             $table->string('status_absen', 50);
             $table->string('foto_absen')->nullable();
-            $table->string('lokasi_absen', length: 100);
+            $table->string('lokasi_absen', length: 100)->nullable();
 
             $table->timestamps(); // created_at & updated_at
 
