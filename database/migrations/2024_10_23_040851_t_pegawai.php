@@ -13,7 +13,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_level');
 
             $table->string('nama_pegawai', 100);
-            $table->integer('no_pegawai')->unique();
+            $table->string('no_pegawai')->unique();
             $table->unsignedBigInteger('boss')->nullable();
             $table->string('jabatan', 100);
             $table->string('alamat', 255);

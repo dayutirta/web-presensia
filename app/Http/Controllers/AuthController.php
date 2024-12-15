@@ -13,9 +13,7 @@ class AuthController extends Controller
         if ($user) {
             if ($user->id_level == '1') {
                 return redirect()->intended('hrd/dashboard');
-            } else if ($user->id_level == '2') {
-                return redirect()->intended('spv/dashboard');
-            }
+            } 
         }
         return view('session.login-session');
     }
@@ -40,9 +38,7 @@ class AuthController extends Controller
             // Redirect berdasarkan id_level
             if ($user->id_level == '1') {
                 return redirect()->intended('hrd/dashboard');
-            } else if ($user->id_level == '2') {
-                return redirect()->intended('spv/dashboard');
-            }
+            } 
         }
 
         return redirect('login')
