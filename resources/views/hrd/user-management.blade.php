@@ -5,7 +5,7 @@
         <div class="card-header">
             <div class="d-flex flex-row justify-content-between align-items-center">
                 <h5 class="mb-0">Data Pegawai</h5>
-                <a href="#" class="btn bg-gradient-info btn-sm mb-0">+ Tambah Data Pegawai</a>
+                <a href="pegawai/create" class="btn bg-gradient-info btn-sm mb-0">+ Tambah Data Pegawai</a>
             </div>
         </div>
         <div class="card-body">

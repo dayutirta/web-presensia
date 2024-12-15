@@ -1,11 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\LevelModel;
 use App\Models\PegawaiModel;
-use App\Models\PenerimaModel;
-use App\Models\PengajuanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -24,11 +21,8 @@ class PegawaiController extends Controller
         if ($level == 1) {
             $jabatanpgw = PegawaiModel::select('jabatan')->distinct()->get();
             return view('hrd.user-management', ['jabatanpgw' => $jabatanpgw, 'pegawai' => $pegawai]);    
-        } elseif ($level == 2) {
-            return view('spv.user-management', ['pegawai' => $pegawai]);    
-        }
+        } 
     }
-
     public function list(Request $request)
     {
         $user = Auth::user();
@@ -39,13 +33,10 @@ class PegawaiController extends Controller
         ->addIndexColumn()
         ->addColumn('aksi', function ($pegawai) {
             return '<div class="btn-group" role="group" aria-label="Actions">
-                        <a href="' . url('/pegawai/' . $pegawai->id_pegawai) . '" class="btn btn-outline-primary" title="View">
-                            <i class="fas fa-eye"></i> Lihat
-                        </a>
-                        <a href="' . url('/pegawai/' . $pegawai->id_pegawai . '/edit') . '" class="btn btn-outline-secondary" title="Edit">
+                        <a href="' . url('/pegawai/' . $pegawai->id_pegawai . '/edit') . '" class="btn btn-outline-primary" title="Edit">
                             <i class="fas fa-edit"></i> Edit
                         </a>
-                        <a href="' . url('/pegawai/' . $pegawai->id_pegawai . '/ubah_status') . '" class="btn btn-outline-danger" title="Delete">
+                        <a href="' . url('/pegawai/' . $pegawai->id_pegawai . '/hapus') . '" class="btn btn-outline-danger" title="Delete">
                             <i class="fas fa-trash-alt"></i> Hapus
                         </a>
                     </div>';
@@ -53,7 +44,6 @@ class PegawaiController extends Controller
         ->rawColumns(['aksi'])
         ->make(true);
     }
-    
     public function create()
     {
         $level = LevelModel::all();
@@ -70,76 +60,51 @@ class PegawaiController extends Controller
             'rt' => $rt
         ]);
     }
-
     public function store(Request $request)
     {
         $request->validate([
-            'id_level' => 'required|integer',
+            'id_level' => 'required|string|exists:level,id_level', // Pastikan id_level ada di tabel levels
             'nama_pegawai' => 'required|string|max:100',
-            'no_pegawai' => 'required|integer|unique:pegawai,no_pegawai',
-            'boss' => 'nullable|integer',
+            'no_pegawai' => 'required|string|unique:pegawai,no_pegawai',
+            'boss' => 'nullable|string',
             'jabatan' => 'required|string|max:100',
             'alamat' => 'required|string|max:255',
             'nohp' => 'required|string|max:20',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:3', 
             'foto' => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
         ]);
     
-        // Proses unggah file
-        if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            
-            // Tentukan path penyimpanan secara manual
-            $customPath = 'C:\Users\Dayutirta\OneDrive\Music\semester 5\mobile\web presensia\storage\foto'; // Path penyimpanan sesuai dengan yang Anda tentukan
-    
-            // Pastikan directory penyimpanan ada, jika tidak, buat directory
-            if (!file_exists($customPath)) {
-                mkdir($customPath, 0755, true);
+        try {
+            // Proses upload foto jika ada
+            $filePath = null;
+            if ($request->hasFile('foto')) {
+                $file = $request->file('foto');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                
+                // Menyimpan foto ke public disk dan mendapatkan path relatif
+                $filePath = $file->storeAs('foto', $filename, 'public');
             }
     
-            // Pindahkan file ke path yang ditentukan
-            $file->move($customPath, $filename);
+            // Simpan data pegawai ke database
+            PegawaiModel::create([
+                'id_level' => $request->id_level,
+                'nama_pegawai' => $request->nama_pegawai,
+                'no_pegawai' => $request->no_pegawai,
+                'boss' => $request->boss,
+                'jabatan' => $request->jabatan,
+                'alamat' => $request->alamat,
+                'nohp' => $request->nohp,
+                'password' => bcrypt($request->password), // Password di-hash
+                'foto' => $filePath,
+            ]);
     
-            // Set path file untuk disimpan di database
-            $filePath = '/storage/foto/' . $filename;
-
-    
-            // Cek apakah path tidak kosong
-            if (!$filePath) {
-                return redirect()->back()->withErrors(['foto' => 'File upload failed']);
-            }
-        } else {
-            return redirect()->back()->withErrors(['foto' => 'File upload failed']);
+            // Redirect ke halaman pegawai dengan pesan sukses
+            return redirect('/pegawai')->with('success', 'Data berhasil ditambahkan');
+        } catch (\Exception $e) {
+            // Jika ada kesalahan, tampilkan pesan error dan tetap di halaman yang sama
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data']);
         }
-    
-        PegawaiModel::create([
-            'id_level' => $request->id_level,
-            'nama_pegawai' => $request->nama_pegawai,
-            'no_pegawai' => $request->no_pegawai,
-            'boss' => $request->boss,
-            'jabatan' => $request->jabatan,
-            'alamat' => $request->alamat,
-            'nohp' => $request->nohp,
-            'password' => bcrypt($request->password), 
-            'foto' => $filePath,
-        ]);
-    
-        return redirect('/pegawai')->with('success', 'Data berhasil ditambahkan');
     }
-    
-    public function show(String $id)
-    {  
-        $pegawai = PegawaiModel::with('level')->where('id_pegawai', $id)->first();
-        $boss=$pegawai->boss;
-
-        $spv = PegawaiModel::with('level')->where('boss', $boss)->get();
-        return view('hrd.pegawai.detail', [
-            'spv' => $spv,
-            'pegawai' => $pegawai,
-        ]);
-    }
-
     public function edit(String $id)
     {
         $pegawai = PegawaiModel::where('id_pegawai', $id)->first();
@@ -149,18 +114,16 @@ class PegawaiController extends Controller
             'level' => $level,
         ]);
     }
-
     public function update(Request $request, String $id)
     {
         $request->validate([
-            'id_level' => 'required|integer',
+            'id_level' => 'required|string',
             'nama_pegawai' => 'required|string|max:100',
-            'no_pegawai' => 'required|integer|unique:pegawai,no_pegawai',
-            'boss' => 'nullable|integer',
+            'no_pegawai' => 'required|string',
             'jabatan' => 'required|string|max:100',
             'alamat' => 'required|string|max:255',
             'nohp' => 'required|string|max:20',
-            'password' => 'required|string|min:8',
+            'password' => 'nullable|string|min:3', 
             'foto' => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
         ]);
     
@@ -175,48 +138,56 @@ class PegawaiController extends Controller
             // Validate and store the new file
             $file = $request->file('foto');
             $filename = time() . '_' . $file->getClientOriginalName();
-            
-            // Specify storage path
-            $customPath = 'C:\Users\Dayutirta\OneDrive\Music\semester 5\mobile\web presensia\storage\foto';
+            $customPath = 'storage/foto';
     
             // Ensure storage directory exists, if not, create it
-            if (!file_exists($customPath)) {
-                mkdir($customPath, 0755, true);
+            if (!file_exists(public_path($customPath))) {
+                mkdir(public_path($customPath), 0755, true);
             }
     
             // Move file to specified path
-            $file->move($customPath, $filename);
+            $file->move(public_path($customPath), $filename);
     
             // Set file path to be saved in the database
-            $filePath = '/storage/foto/' . $filename;
+            $filePath = $customPath . '/' . $filename;
     
             // Update pegawai data including the new photo path
-            PegawaiModel::create([
+            $pegawai->update([
                 'id_level' => $request->id_level,
                 'nama_pegawai' => $request->nama_pegawai,
                 'no_pegawai' => $request->no_pegawai,
-                'boss' => $request->boss,
                 'jabatan' => $request->jabatan,
                 'alamat' => $request->alamat,
                 'nohp' => $request->nohp,
-                'password' => bcrypt($request->password), 
+                'password' => $request->password ? bcrypt($request->password) : $pegawai->password,
                 'foto' => $filePath,
             ]);
-    
         } else {
             // Update pegawai data without changing the photo
-            PegawaiModel::create([
+            $pegawai->update([
                 'id_level' => $request->id_level,
                 'nama_pegawai' => $request->nama_pegawai,
                 'no_pegawai' => $request->no_pegawai,
-                'boss' => $request->boss,
                 'jabatan' => $request->jabatan,
                 'alamat' => $request->alamat,
                 'nohp' => $request->nohp,
-                'password' => bcrypt($request->password), 
+                'password' => $request->password ? bcrypt($request->password) : $pegawai->password,
             ]);
         }
     
         return redirect('/pegawai')->with('success', 'Data berhasil diubah');
+    }
+    public function hapus(String $id)
+    {
+        $pegawai = PegawaiModel::find($id);
+        if (!$pegawai) {
+            return redirect('/pegawai')->withErrors(['message' => 'Data pegawai tidak ditemukan']);
+        }
+        // Hapus file foto jika ada
+        if ($pegawai->foto && file_exists(public_path($pegawai->foto))) {
+            unlink(public_path($pegawai->foto));
+        }
+        $pegawai->delete();
+        return redirect('/pegawai')->with('success', 'Data pegawai berhasil dihapus');
     }
 }
