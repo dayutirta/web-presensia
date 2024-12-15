@@ -19,7 +19,7 @@ Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('login', [AuthController::class, 'proses_login'])->name('proses_login');
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-// Rute untuk halaman form "Lupa Password" tapi gajadi dipake
+// Rute untuk halaman form "Lupa Password" tapi gajadi dibuild
 Route::get('login/forgot-password', function () {
     return view('session.reset-password.resetPassword'); 
 })->name('forgot-password');
